@@ -24,6 +24,9 @@ class Category(models.Model):
     )
     title = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.title
+
 
 class Image(models.Model):
     user = models.ForeignKey(
@@ -48,7 +51,7 @@ class Question(models.Model):
     tag = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    answers = models.ManyToManyField('Answer', related_name="questionAnswers")
+    answers = models.ManyToManyField('Answer', related_name="questionAnswers", null=True, blank=True)
     images = models.ManyToManyField('Image', blank=True)
 
 

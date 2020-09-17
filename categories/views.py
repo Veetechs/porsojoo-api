@@ -1,6 +1,7 @@
 from rest_framework import viewsets, mixins, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
+from rest_framework import filters
 from categories import custom_permissions
 from rest_framework import permissions, response, generics
 from rest_framework.views import APIView
@@ -11,6 +12,8 @@ from categories import serializers
 from rest_framework.parsers import FileUploadParser
 
 from django.conf import settings
+
+from categories.models import Question
 
 
 class AddImage(APIView):
@@ -47,6 +50,8 @@ class BaseQuestionViewSet(
     mixins.UpdateModelMixin
 ):
     authentication_classes = (TokenAuthentication,)
+    search_fields = ['tag', 'title', 'body']
+    filter_backends = (filters.SearchFilter,)
 
     def get_permissions(self):
         if self.action == 'list' or self.action == 'retrieve':
@@ -142,6 +147,7 @@ class CategoryBaseViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins
 
 class CategoryViewSet(BaseAnswerViewSet):
     queryset = models.Category.objects.all()
+    permission_classes = [permissions.AllowAny]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -187,3 +193,32 @@ class DisLike(APIView):
         return JsonResponse({
             "data": custom_response.custom_response("successfully disliked!", {})
         }, status=status.HTTP_200_OK)
+
+
+class GetByCategoryBase(viewsets.GenericViewSet,
+                       mixins.ListModelMixin):
+    permission_classes = [permissions.AllowAny]
+
+    authentication_classes = (TokenAuthentication,)
+
+
+class GetByCategoryOne(GetByCategoryBase):
+    queryset = Question.objects.filter(category_id=1)
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return serializers.QuestionFullSerializer
+        if self.action == 'list':
+            return serializers.QuestionFullSerializer
+        return serializers.QuestionSerializer
+
+
+class GetByCategoryTwo(GetByCategoryBase):
+    queryset = Question.objects.filter(category_id=2)
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return serializers.QuestionFullSerializer
+        if self.action == 'list':
+            return serializers.QuestionFullSerializer
+        return serializers.QuestionSerializer

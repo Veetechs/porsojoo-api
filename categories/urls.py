@@ -7,6 +7,9 @@ router = DefaultRouter()
 
 router.register('questions', views.QuestionViewSet),
 router.register('categories', views.CategoryViewSet),
+router.register('categorieone', views.GetByCategoryOne),
+router.register('categorietwo', views.GetByCategoryTwo),
+
 
 app_name = 'main'
 

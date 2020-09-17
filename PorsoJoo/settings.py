@@ -25,7 +25,7 @@ SECRET_KEY = 'l1zgd$&tsajn0u0ec*$%7sd1kqo5e__)2#v+6fto5&#b!@0x)z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['porsojooapi.vcorporation.ir', '127.0.0.1']
 
 
 # Application definition
@@ -40,10 +40,31 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'users',
-    'categories'
+    'categories',
+    'corsheaders'
 ]
-
+CORS_ORIGIN_WHITELIST = [
+    "https://example.com",
+    "https://sub.example.com",
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:9000",
+    "http://49.12.57.35:3000"
+]
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -120,7 +141,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+# SECURE_SSL_REDIRECT = True
+SITE_URL = 'https://porsojooapi.vcorporation.ir/'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 

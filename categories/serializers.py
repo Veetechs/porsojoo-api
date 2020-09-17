@@ -60,7 +60,7 @@ class QuestionFullSerializer(serializers.ModelSerializer):
         read_only=True,
 
     )
-    answers = AnswerFullSerializer(many=True, read_only=True)
+    answers = AnswerFullSerializer(many=True, read_only=True, required=False)
 
     class Meta:
         model = models.Question
